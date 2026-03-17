@@ -8,7 +8,7 @@
     <title>ALERT: SYSTEM_COMPROMISED // CIDES</title>
 </head>
 <body class="red-alert-theme">
-
+    <div class="custom-cursor"></div>
     <div class="crt-master-overlay"></div>
     <div class="vignette"></div>
     <div class="noise-layer"></div>
@@ -133,6 +133,61 @@
             document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
         }
         setInterval(updateClock, 1000);
+    </script>
+    <script>
+        const cursor = document.querySelector('.custom-cursor');
+const glitchTitle = document.querySelector('.mega-glitch');
+const logs = document.querySelector('.console-box');
+
+// 1. MOTOR DO CURSOR DINÂMICO
+document.addEventListener('mousemove', (e) => {
+    cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
+});
+
+// 2. INTERATIVIDADE DE CLIQUES (FEEDBACK VISUAL)
+document.addEventListener('mousedown', () => {
+    cursor.style.transform += ' scale(0.7)';
+    document.body.style.filter = 'contrast(1.2) brightness(1.1)';
+});
+
+document.addEventListener('mouseup', () => {
+    cursor.style.transform += ' scale(1)';
+    document.body.style.filter = 'none';
+});
+
+// 3. SIMULADOR DE LOGS EM TEMPO REAL
+const logMessages = [
+    "[INFO] Verificando integridade do kernel...",
+    "[OK] Cache Node.js otimizado.",
+    "[WARN] Tentativa de rastreamento bloqueada.",
+    "[SEC] Conexão via túnel criptografado estabelecida.",
+    "[SYS] Sincronizando repositórios remotos..."
+];
+
+setInterval(() => {
+    const p = document.createElement('p');
+    p.className = 'ln';
+    p.style.opacity = '0';
+    p.innerText = `${new Date().toLocaleTimeString()} : ${logMessages[Math.floor(Math.random() * logMessages.length)]}`;
+    logs.prepend(p);
+    
+    
+    setTimeout(() => p.style.opacity = '0.5', 50);
+    
+   
+    if (logs.children.length > 15) logs.lastElementChild.remove();
+}, 4000);
+
+
+function triggerRandomGlitch() {
+    const chance = Math.random();
+    if (chance > 0.95) {
+        document.body.style.transform = `translateX(${Math.random() * 4 - 2}px)`;
+        setTimeout(() => document.body.style.transform = 'none', 100);
+    }
+    requestAnimationFrame(triggerRandomGlitch);
+}
+triggerRandomGlitch();
     </script>
 </body>
 </html>
